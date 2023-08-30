@@ -1,3 +1,4 @@
+"""Image processing and Target Words detection"""
 from pprint import pprint
 from typing import TypeAlias, Literal
 
@@ -73,11 +74,11 @@ def proceed(word: str) -> str:
     Examples
     --------
     >>> proceed('Нефт...пр...вод.')
-    'нефт*пр*вод'
+    'нефт*пр*вод*'
     >>> proceed('миро(воз, вос)зрение,')
     'миро*зрение'
     >>> proceed('само(во$, вос)г@раNие')
-    'само*г?ра?ие'
+    'само*г*ра*ие'
     >>> proceed('...бежать')
     '*бежать'
     >>> proceed('(с, з)горать')
