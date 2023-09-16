@@ -1,4 +1,5 @@
-"""Scrapping"""
+"""Scrapping."""
+
 import asyncio
 import http
 import urllib.parse
@@ -7,16 +8,17 @@ from enum import Enum
 from pprint import pprint
 
 import aiohttp
-from bs4 import BeautifulSoup as BS
+from bs4 import BeautifulSoup as BS  # noqa N817
 from bs4.element import Tag
 from fuzzywuzzy import process
 
-from utils import parsedData, rawData, imgFromFile
+from source.utils import parsedData, rawData, imgFromFile
 
 
 class Dict(Enum):
-    """
-    Dictionaries from gramota.ru in which the word will be searched
+
+    """Dictionaries from gramota.ru in which the word will be searched
+
     :arg SP:  Орфографический словарь
     :arg LED: Большой толковый словарь
     :arg RVS: Русское словесное ударение
@@ -25,8 +27,9 @@ class Dict(Enum):
     :arg SQF: Синонимы: краткий справочник
     :arg DOA: Словарь антонимов
     :arg DMT: Словарь методических терминов
-    :arg DRN: Словарь русских имён
+    :arg DRN: Словарь русских имён.
     """
+
     SP = {'lop': 'x'}
     LED = {'bts': 'x'}
     RVS = {'zar': 'x'}
@@ -42,14 +45,18 @@ garbage_words = 'звездочка * вопросительный знак ? З
                 'чес*ный,  проф*ес*ор,  ветрен*ый. фа фа-бекар фа-бемоль фа-бемольный'  # noqa
 
 
-def scrapping(parsedWords: list[str], limit: int = 5, *args: Dict) -> list[str]:
-    """
-    Launching scraping on the gramota.ru using the specified dictionaries.
+def scrapping(
+        parsedWords: list[str],
+        limit: int = 5,
+        *args: Dict
+) -> list[str]:
+    """Launch scraping on the gramota.ru using the specified dictionaries
+
     :param parsedWords:
     :param limit: number of matches for one word
     :param args: the dictionaries used . By default, SP, RVS, DPN, DRN
     :return: a list with the best matches for each word.
-    The quality of the match is determined using the Levenshtein distance
+    The quality of the match is determined using the Levenshtein distance.
     """
     dicts = form_dicts(args)
     scrapping_result: list[list[str]] = asyncio.run(async_scraping(parsedWords, dicts))
@@ -64,15 +71,18 @@ def scrapping(parsedWords: list[str], limit: int = 5, *args: Dict) -> list[str]:
     return scrapping_processed
 
 
-async def async_scraping(parsedWords: list[str], dicts: dict[str, str]) -> list[list[str]]:
-    """
-    Starts async word parsing
+async def async_scraping(
+        parsedWords: list[str],
+        dicts: dict[str: str]
+) -> list[list[str]]:
+    """Start async word parsing
+
     :param parsedWords:
     :param dicts:
     :return: a list of lists
     where the index of each word
     from the original list corresponds to a
-    set of words found on the page
+    set of words found on the page.
     """
     async with aiohttp.ClientSession() as session:
         tasks: list[Task] = []
@@ -88,8 +98,8 @@ async def gramota(
         word: str,
         params: dict[str, str]
 ) -> list[str]:
-    """
-    Async parsing of a web page to find the correct spelling of a word.
+    """Async parsing of a web page to find the correct spelling of a word
+
     If the word is not found, then the ending of the word is cut off, and
     it gets additional characters at the beginning and end
     :param session: aiohttp session
@@ -97,7 +107,7 @@ async def gramota(
     :param params: dict of using Dicts
     :return: all found words and phrases.
     The capital letter highlights the correct stress in the word.
-    The list needs post-processing because there is a lot of garbage on the page
+    The list needs post-processing because there is a lot of garbage on the page.
     """
     params['word'] = word
     url = 'http://www.gramota.ru/slovari/dic/?' + urllib.parse.urlencode(params)
@@ -129,8 +139,8 @@ async def gramota(
 
 
 def form_dicts(dict_list: tuple[Dict]) -> dict[str, str]:
-    """
-    Get dictionaries that are used in parsing
+    """Get dictionaries that are used in parsing
+
     :param dict_list:
     :return:
     """

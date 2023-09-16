@@ -1,0 +1,11 @@
+metadata:
+  TGToken: paste your token here
+  version: 1.0.0
+URL:
+  baseUrl: http://localhost:5000/
+  tuple: /api/tuple
+  list: /api/list
+  statistic: /api/statistics
+statistics:
+  imagesProcessed: 0
+  wordsParsed: 0

@@ -1,0 +1,10 @@
+select = ["E", "F", "B", "N", "D", "ANN"]
+
+ignore = ["D211", "D213", "N802", "N803", "D400", "D415", "N806"]
+
+[per-file-ignores]
+"source/__init__.py" = ["D104"]
+"api/__init__.py" = ["D104"]
+"api/client.py" = ["D100"]
+"TelegramBot/__init__.py" = ["D104", "N999"]
+"TelegramBot/botReplicas.py" = ["N999", "N815"]

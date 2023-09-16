@@ -1,4 +1,6 @@
 """Image processing and Target Words detection"""
+import os
+import sys
 from pprint import pprint
 from typing import TypeAlias, Literal
 
@@ -7,28 +9,30 @@ import numpy as np
 import pytesseract
 
 Image: TypeAlias = np.ndarray
-File: TypeAlias = Literal["Excellent.jpg", "Good.jpg", "Normal.jpg", "Bad.jpg", "Terrible.jpg"]
+File: TypeAlias = Literal[
+    "Excellent.jpg", "Good.jpg", "Normal.jpg", "Bad.jpg", "Terrible.jpg"
+]
 
 SpecSymbols: list[str] = ['.', '(', ')', '_']
 Punctuation: list[str] = [',', '!', ' ', '?', ':', ';']
 
 
 def imgFromFile(filename: File) -> Image:
+    """Read Pre-build images in imgExamples directory
+
+    :param str filename: Name of file in imgExamples directory
+    :return: Image.
     """
-    Reads Pre-build images in img directory
-    :param str filename: Name of file in img directory
-    :return: Image
-    """
-    img = cv2.imread(f'img/{filename}')
+    img = cv2.imread(os.path.join(sys.path[0], 'imgExamples', filename))
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     return img
 
 
 def imgFromBytes(byte_list: bytes) -> Image:
-    """
-    Get Image from bytes
+    """Get Image from bytes
+
     :param bytes byte_list:
-    :return: Image
+    :return: Image.
     """
     # noinspection PyTypeChecker
     array: np.ndarray = np.fromstring(byte_list, np.uint8)
@@ -37,14 +41,15 @@ def imgFromBytes(byte_list: bytes) -> Image:
 
 
 def rawData(img: Image) -> str:
+    """Extract text from Image via TesseractORC"""
     return pytesseract.image_to_string(img, lang='rus')
 
 
 def parsedData(raw: str) -> list[str]:
-    """
-    Get target words from string that contains all detected words
+    """Get target words from string that contains all detected words
+
     :param raw: all words detected on Image
-    :return: List of target words
+    :return: List of target words.
     """
 
     def findTarget(word: str) -> bool:
@@ -66,10 +71,10 @@ def parsedData(raw: str) -> list[str]:
 
 
 def proceed(word: str) -> str:
-    """
-    Proceed word
+    """Proceed word
+
     :param word:
-    :return: proceeded word
+    :return: proceeded word.
 
     Examples
     --------
